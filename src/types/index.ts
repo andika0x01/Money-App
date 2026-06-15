@@ -14,4 +14,5 @@ export interface TransactionFormData {
   amount: number;
   type: TransactionType;
   category: string;
+  date: string;
 }

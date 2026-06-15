@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { TransactionFormData, TransactionType } from "@/types";
 import { Plus, X } from "@phosphor-icons/react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 interface FormProps {
   onAdd: (data: TransactionFormData) => void;
@@ -15,20 +15,24 @@ export const TransactionForm = ({ onAdd }: FormProps) => {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<TransactionType>("expense");
   const [category, setCategory] = useState("Umum");
+  const [date, setDate] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !amount) return;
+    if (!title || !amount || parseFloat(amount) <= 0 || !date) return;
 
     onAdd({
       title,
       amount: parseFloat(amount),
       type,
       category,
+      date,
     });
 
     setTitle("");
     setAmount("");
+    setCategory("Umum");
+    setDate("");
     setIsOpen(false);
   };
 
@@ -44,39 +48,30 @@ export const TransactionForm = ({ onAdd }: FormProps) => {
           Add Transaction
         </motion.button>
       ) : (
-        <motion.div
-          layoutId="form"
-          className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm"
-        >
+        <motion.div layoutId="form" className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-bold tracking-tight">New Transaction</h3>
             <button onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-zinc-600">
               <X size={20} weight="bold" />
             </button>
           </div>
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex gap-2 p-1 bg-zinc-100 rounded-lg mb-4">
               <button
                 type="button"
                 onClick={() => setType("expense")}
-                className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${
-                  type === "expense" ? "bg-white shadow-sm text-rose-600" : "text-zinc-500"
-                }`}
+                className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${type === "expense" ? "bg-white shadow-sm text-rose-600" : "text-zinc-500"}`}
               >
                 Expense
               </button>
               <button
                 type="button"
                 onClick={() => setType("income")}
-                className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${
-                  type === "income" ? "bg-white shadow-sm text-emerald-600" : "text-zinc-500"
-                }`}
+                className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${type === "income" ? "bg-white shadow-sm text-emerald-600" : "text-zinc-500"}`}
               >
                 Income
               </button>
             </div>
-
             <div className="space-y-1">
               <label className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 ml-1">Title</label>
               <input
@@ -88,7 +83,6 @@ export const TransactionForm = ({ onAdd }: FormProps) => {
                 className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-950/10 transition-all text-zinc-950"
               />
             </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 ml-1">Amount</label>
@@ -116,7 +110,15 @@ export const TransactionForm = ({ onAdd }: FormProps) => {
                 </select>
               </div>
             </div>
-
+            <div className="space-y-1">
+              <label className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 ml-1">Date</label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-950/10 transition-all text-zinc-950"
+              />
+            </div>
             <button
               type="submit"
               className="w-full py-4 bg-zinc-950 text-white rounded-xl font-bold mt-4 hover:bg-zinc-800 transition-all active:scale-[0.98]"

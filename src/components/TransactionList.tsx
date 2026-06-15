@@ -75,20 +75,26 @@ export const TransactionList = ({ transactions, onDelete, onUpdate }: ListProps)
                   editingId === transaction.id ? 'border-zinc-950 ring-1 ring-zinc-950' : 'border-zinc-200 hover:border-zinc-300'
                 }`}
               >
-                {editingId === transaction.id ? (
-                  <div className="flex-1 flex items-center gap-4">
+{editingId === transaction.id ? (
+                  <div className="flex-1 flex flex-col gap-2">
                     <input 
-                      className="flex-1 px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-lg text-sm font-bold"
+                      className="px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-lg text-sm font-bold"
                       value={editData.title}
                       onChange={e => setEditData({...editData, title: e.target.value})}
                     />
                     <input 
-                      className="w-32 px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-lg text-sm font-mono font-bold"
+                      className="w-full px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-lg text-sm font-mono font-bold"
                       type="number"
                       value={editData.amount}
                       onChange={e => setEditData({...editData, amount: parseFloat(e.target.value)})}
                     />
-                    <div className="flex gap-1">
+                    <input 
+                      className="w-full px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-lg text-sm"
+                      type="date"
+                      value={editData.date?.split('T')[0] || ''}
+                      onChange={e => setEditData({...editData, date: e.target.value})}
+                    />
+                    <div className="flex gap-1 mt-1">
                       <button onClick={saveEdit} className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg">
                         <Check size={18} weight="bold" />
                       </button>
@@ -137,7 +143,7 @@ export const TransactionList = ({ transactions, onDelete, onUpdate }: ListProps)
                           <PencilSimple size={18} weight="bold" />
                         </button>
                         <button 
-                          onClick={() => onDelete(transaction.id)}
+                          onClick={() => { if (window.confirm('Delete this transaction?')) onDelete(transaction.id); }}
                           className="p-2 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
                         >
                           <Trash size={18} weight="bold" />
