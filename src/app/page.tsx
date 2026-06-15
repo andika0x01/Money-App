@@ -29,7 +29,7 @@ export default function Home() {
               <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Personal Finance</span>
             </div>
             <h1 className="text-4xl font-bold tracking-tighter text-zinc-950">
-              Money Tracker
+              Personal Finance Tracker
             </h1>
           </div>
           <div className="text-right">
